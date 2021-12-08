@@ -3,9 +3,12 @@ import { useState } from 'react';
 import CommentList from './comment-list';
 import NewComment from './new-comment';
 import classes from './comments.module.css';
+import { useDispatch } from "react-redux";
+import { loadComments } from "../../store/comments-slice";
 
 function Comments(props) {
   const { eventId } = props;
+  const dispatch = useDispatch();
 
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState([]);
@@ -19,6 +22,7 @@ function Comments(props) {
         .then((data) => {
           // convert JSON tree to array
           console.log(data);
+          dispatch(loadComments({ eventId, data }));
           const commentsArray = [];
           for (const key in data) {
             commentsArray.push({ id: key, ...data[key] });
